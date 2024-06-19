@@ -31,9 +31,8 @@ CONFIG_SCHEMA = (
         }
     )
     .extend(cv.COMPONENT_SCHEMA)
-    .extend(
-        i2c.i2c_device_schema(0x26)
-    )  # Note: 0x26 for the non-A part. The ch422g parts start at addess 0x38
+    .extend(i2c.i2c_device_schema(0x24))
+    # address is 0x24
 )
 
 
