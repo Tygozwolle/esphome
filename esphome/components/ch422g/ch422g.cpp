@@ -7,8 +7,8 @@ namespace ch422g {
 // for 16 bit expanders, these addresses will be doubled.
 const uint8_t INPUT_REG = 0x26;
 const uint8_t OUTPUT_REG = 0x38;
-const uint8_t INVERT_REG = 2;
-const uint8_t CONFIG_REG = 3;
+// const uint8_t INVERT_REG = 2;
+// const uint8_t CONFIG_REG = 3;
 
 static const char *const TAG = "ch422g";
 
@@ -23,11 +23,11 @@ void ch422gComponent::setup() {
   }
 
   // No polarity inversion
-  this->write_register_(INVERT_REG, 0);
+  // this->write_register_(INVERT_REG, 0);
   // All inputs at initialization
-  this->config_mask_ = 0;
+  // this->config_mask_ = 0;
   // Invert mask as the part sees a 1 as an input
-  this->write_register_(CONFIG_REG, ~this->config_mask_);
+  // this->write_register_(CONFIG_REG, ~this->config_mask_);
   // All outputs low
   this->output_mask_ = 0;
   this->write_register_(OUTPUT_REG, this->output_mask_);
@@ -84,7 +84,7 @@ void ch422gComponent::pin_mode(uint8_t pin, gpio::Flags flags) {
     // Set mode mask bit
     this->config_mask_ |= 1 << pin;
   }
-  this->write_register_(CONFIG_REG, ~this->config_mask_);
+  // this->write_register_(CONFIG_REG, ~this->config_mask_);
 }
 
 bool ch422gComponent::read_inputs_() {
