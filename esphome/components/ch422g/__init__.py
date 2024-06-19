@@ -32,8 +32,8 @@ CONFIG_SCHEMA = (
     )
     .extend(cv.COMPONENT_SCHEMA)
     .extend(
-        i2c.i2c_device_schema(0x20)
-    )  # Note: 0x20 for the non-A part. The ch442g parts start at addess 0x38
+        i2c.i2c_device_schema(0x26)
+    )  # Note: 0x26 for the non-A part. The ch442g parts start at addess 0x38
 )
 
 
@@ -52,7 +52,7 @@ def validate_mode(value):
     return value
 
 
-PCA9554_PIN_SCHEMA = pins.gpio_base_schema(
+ch442g_PIN_SCHEMA = pins.gpio_base_schema(
     ch442gGPIOPin,
     cv.int_range(min=0, max=15),
     modes=[CONF_INPUT, CONF_OUTPUT],
@@ -71,7 +71,7 @@ def ch442g_pin_final_validate(pin_config, parent_config):
 
 
 @pins.PIN_SCHEMA_REGISTRY.register(
-    CONF_ch442g, PCA9554_PIN_SCHEMA, ch442g_pin_final_validate
+    CONF_ch442g, ch442g_PIN_SCHEMA, ch442g_pin_final_validate
 )
 async def ch442g_pin_to_code(config):
     var = cg.new_Pvariable(config[CONF_ID])
