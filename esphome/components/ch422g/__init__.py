@@ -14,7 +14,7 @@ from esphome.const import (
 CODEOWNERS = ["@Tygozwolle"]
 DEPENDENCIES = ["i2c"]
 MULTI_CONF = True
-CONF_PIN_COUNT = "pin_count" 
+CONF_PIN_COUNT = "pin_count"
 ch442g_ns = cg.esphome_ns.namespace("ch442g")
 
 ch442gComponent = ch442g_ns.class_("ch442gComponent", cg.Component, i2c.I2CDevice)
