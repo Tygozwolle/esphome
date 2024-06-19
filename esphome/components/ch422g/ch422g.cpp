@@ -8,7 +8,7 @@ namespace ch422g {
 const uint8_t INPUT_REG = 0x26;
 const uint8_t OUTPUT_REG = 0x38;
 // const uint8_t INVERT_REG = 2;
-const uint8_t CONFIG_REG = 1;
+const uint8_t CONFIG_REG = 0;
 
 static const char *const TAG = "ch422g";
 
