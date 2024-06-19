@@ -77,10 +77,10 @@ void ch422gComponent::digital_write(uint8_t pin, bool value) {
 }
 
 void ch422gComponent::pin_mode(uint8_t pin, gpio::Flags flags) {
-  if (flags == gpio::FLAG_INPUT) {
+  if (flags == gpio::FLAG_OUTPUT) {
     // Clear mode mask bit
     this->config_mask_ &= ~(1 << pin);
-  } else if (flags == gpio::FLAG_OUTPUT) {
+  } else if (flags == gpio::FLAG_INPUT) {
     // Set mode mask bit
     this->config_mask_ |= 1 << pin;
   }
