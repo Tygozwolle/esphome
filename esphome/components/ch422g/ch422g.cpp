@@ -69,43 +69,16 @@ bool Ch422gComponent::digital_read(uint8_t pin) {
   // read happens later in the same loop.
   // this->was_previously_read_ |= (1 << pin);
   //  return this->input_mask_ & (1 << pin);
-  u_int8_t input_reg[4];
-  read_register(INPUT_REG, &input_reg, 4, true);
-  return (level & BIT64(pin)) ? HIGH : LOW;
-  // return expander->digitalRead(pin);
+  return expander->digitalRead(pin);
 }
 
 void Ch422gComponent::digital_write(uint8_t pin, bool value) {
-  // if (value) {
-  //   expander->digitalWrite(pin, HIGH);
-  //   ESP_LOGD(TAG, "Setting pin %d to HIGH", pin);
-  // } else {
-  //   expander->digitalWrite(pin, LOW);
-  // }
-  u_int8_t output_reg[4];
-
-  read_register(OUTPUT_REG, &output_reg, 4, true);
-  // temp = output_reg;
-  uint32_t i32 = output_reg[0] | (output_reg[1] << 8) | (output_reg[2] << 16) | (output_reg[3] << 24);
   if (value) {
-    i32 |= BIT64(pin);
+    expander->digitalWrite(pin, HIGH);
+    ESP_LOGD(TAG, "Setting pin %d to HIGH", pin);
   } else {
-    i32 &= ~BIT64(pin);
+    expander->digitalWrite(pin, LOW);
   }
-  write_register(OUTPUT_REG, output_reg, 4, true);
-  // for (int i = 0; i < io_count; i++) {
-  //     if (pin_num_mask & BIT(i)) {
-  //         dir_bit = dir_reg & BIT(i);
-  //         /* Check whether it is in input mode */
-  //         if ((dir_bit && handle->config.flags.dir_out_bit_zero) || (!dir_bit &&
-  //         !handle->config.flags.dir_out_bit_zero)) {
-  //             /* 1. 1 && Set 1 to input */
-  //             /* 2. 0 && Set 0 to input */
-  //             ESP_LOGE(TAG, "Pin[%d] can't set level in input mode", i);
-  //             return ESP_ERR_INVALID_STATE;
-  //         }
-  //     }
-  // }
 
   // if (value) {
   //   this->output_mask_ |= (1 << pin);
