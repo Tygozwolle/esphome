@@ -69,16 +69,41 @@ bool Ch422gComponent::digital_read(uint8_t pin) {
   // read happens later in the same loop.
   // this->was_previously_read_ |= (1 << pin);
   //  return this->input_mask_ & (1 << pin);
-  return expander->digitalRead(pin);
+  uint32_t input_reg;
+  read_register(INPUT_REG, &input_reg, 4, true);
+  return (level & BIT64(pin)) ? HIGH : LOW;
+  // return expander->digitalRead(pin);
 }
 
 void Ch422gComponent::digital_write(uint8_t pin, bool value) {
+  // if (value) {
+  //   expander->digitalWrite(pin, HIGH);
+  //   ESP_LOGD(TAG, "Setting pin %d to HIGH", pin);
+  // } else {
+  //   expander->digitalWrite(pin, LOW);
+  // }
+  uint32_t output_reg, temp;
+  read_register(OUTPUT_REG, &output_reg, 4, true);
+  temp = output_reg;
   if (value) {
-    expander->digitalWrite(pin, HIGH);
-    ESP_LOGD(TAG, "Setting pin %d to HIGH", pin);
+    output_reg |= BIT64(pin);
   } else {
-    expander->digitalWrite(pin, LOW);
+    output_reg &= ~BIT64(pin);
   }
+  write_register(OUTPUT_REG, output_reg, 4, true);
+  // for (int i = 0; i < io_count; i++) {
+  //     if (pin_num_mask & BIT(i)) {
+  //         dir_bit = dir_reg & BIT(i);
+  //         /* Check whether it is in input mode */
+  //         if ((dir_bit && handle->config.flags.dir_out_bit_zero) || (!dir_bit &&
+  //         !handle->config.flags.dir_out_bit_zero)) {
+  //             /* 1. 1 && Set 1 to input */
+  //             /* 2. 0 && Set 0 to input */
+  //             ESP_LOGE(TAG, "Pin[%d] can't set level in input mode", i);
+  //             return ESP_ERR_INVALID_STATE;
+  //         }
+  //     }
+  // }
 
   // if (value) {
   //   this->output_mask_ |= (1 << pin);
@@ -110,25 +135,25 @@ void Ch422gComponent::pin_mode(uint8_t pin, gpio::Flags flags) {
 }
 
 bool Ch422gComponent::read_inputs_() {
-  uint8_t inputs[2];
+  // uint8_t inputs[2];
 
-  if (this->is_failed()) {
-    ESP_LOGD(TAG, "Device marked failed");
-    return false;
-  }
+  // if (this->is_failed()) {
+  //   ESP_LOGD(TAG, "Device marked failed");
+  //   return false;
+  // }
 
-  if ((this->last_error_ = this->read_register(INPUT_REG * this->reg_width_, inputs, this->reg_width_, true)) !=
-      esphome::i2c::ERROR_OK) {
-    this->status_set_warning();
-    ESP_LOGE(TAG, "read_register_(): I2C I/O error: %d", (int) this->last_error_);
-    return false;
-  }
-  this->status_clear_warning();
-  this->input_mask_ = inputs[0];
-  if (this->reg_width_ == 2) {
-    this->input_mask_ |= inputs[1] << 8;
-  }
-  return true;
+  // if ((this->last_error_ = this->read_register(INPUT_REG * this->reg_width_, inputs, this->reg_width_, true)) !=
+  //     esphome::i2c::ERROR_OK) {
+  //   this->status_set_warning();
+  //   ESP_LOGE(TAG, "read_register_(): I2C I/O error: %d", (int) this->last_error_);
+  //   return false;
+  // }
+  // this->status_clear_warning();
+  // this->input_mask_ = inputs[0];
+  // if (this->reg_width_ == 2) {
+  //   this->input_mask_ |= inputs[1] << 8;
+  // }
+  // return true;
 }
 
 bool Ch422gComponent::write_register_(uint8_t reg, uint16_t value) {
