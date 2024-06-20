@@ -83,12 +83,14 @@ void Ch422gComponent::digital_write(uint8_t pin, bool value) {
   //   expander->digitalWrite(pin, LOW);
   // }
   u_int8_t output_reg[4];
+
   read_register(OUTPUT_REG, &output_reg, 4, true);
   // temp = output_reg;
+  uint32_t i32 = output_reg[0] | (output_reg[1] << 8) | (output_reg[2] << 16) | (output_reg[3] << 24);
   if (value) {
-    output_reg |= BIT64(pin);
+    i32 |= BIT64(pin);
   } else {
-    output_reg &= ~BIT64(pin);
+    i32 &= ~BIT64(pin);
   }
   write_register(OUTPUT_REG, output_reg, 4, true);
   // for (int i = 0; i < io_count; i++) {
