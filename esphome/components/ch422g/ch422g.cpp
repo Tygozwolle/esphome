@@ -11,10 +11,12 @@ const uint8_t INVERT_REG = 2;
 const uint8_t CONFIG_REG = 0;
 
 static const char *const TAG = "ch422g";
+ESP_IOExpander *expander;
 
 void Ch422gComponent::setup() {
   ESP_LOGCONFIG(TAG, "Setting up ch422g...");
-  this->reg_width_ = (this->pin_count_ + 7) / 8;
+  // this->reg_width_ = (this->pin_count_ + 7) / 8;
+  expander = new ESP_IOExpander_CH422G(this->bus_, this->address_);
   // Test to see if device exists
   if (!this->read_inputs_()) {
     ESP_LOGE(TAG, "ch422g not detected at 0x%02X", this->address_);
@@ -23,25 +25,26 @@ void Ch422gComponent::setup() {
   }
 
   // No polarity inversion
-  this->write_register_(INVERT_REG, 0);
+  // this->write_register_(INVERT_REG, 0);
   // All inputs at initialization
-  this->config_mask_ = 0;
+  //  this->config_mask_ = 0;
   // Invert mask as the part sees a 1 as an input
-  this->write_register_(CONFIG_REG, ~this->config_mask_);
+  // this->write_register_(CONFIG_REG, ~this->config_mask_);
   // All outputs low
-  this->output_mask_ = 0;
-  this->write_register_(OUTPUT_REG, this->output_mask_);
+  // this->output_mask_ = 0;
+  // this->write_register_(OUTPUT_REG, this->output_mask_);
   // Read the inputs
-  this->read_inputs_();
+  //  this->read_inputs_();
   ESP_LOGD(TAG, "Initialization complete. Warning: %d, Error: %d", this->status_has_warning(),
            this->status_has_error());
 }
 
 void Ch422gComponent::loop() {
   // The read_inputs_() method will cache the input values from the chip.
-  this->read_inputs_();
+  // this->read_inputs_();
+  // expander->multiDigitalRead();
   // Clear all the previously read flags.
-  this->was_previously_read_ = 0x00;
+  // this->was_previously_read_ = 0x00;
 }
 
 void Ch422gComponent::dump_config() {
@@ -59,32 +62,49 @@ bool Ch422gComponent::digital_read(uint8_t pin) {
   // have seen a read during the time esphome is running this loop. If we have,
   // we do an I2C bus transaction to get the latest value. If we haven't
   // we return a cached value which was read at the time loop() was called.
-  if (this->was_previously_read_ & (1 << pin))
-    this->read_inputs_();  // Force a read of a new value
+  // if (this->was_previously_read_ & (1 << pin))
+  //  this->read_inputs_();  // Force a read of a new value
   // Indicate we saw a read request for this pin in case a
   // read happens later in the same loop.
-  this->was_previously_read_ |= (1 << pin);
-  return this->input_mask_ & (1 << pin);
+  // this->was_previously_read_ |= (1 << pin);
+  //  return this->input_mask_ & (1 << pin);
+  return expander->digitalRead(pin);
 }
 
 void Ch422gComponent::digital_write(uint8_t pin, bool value) {
   if (value) {
-    this->output_mask_ |= (1 << pin);
+    expander->digitalWrite(pin, HIGH);
   } else {
-    this->output_mask_ &= ~(1 << pin);
+    expander->digitalWrite(pin, LOW);
   }
-  this->write_register_(OUTPUT_REG, this->output_mask_);
+
+  // if (value) {
+  //   this->output_mask_ |= (1 << pin);
+  // } else {
+  //   this->output_mask_ &= ~(1 << pin);
+  // }
+  // this->write_register_(OUTPUT_REG, this->output_mask_);
 }
 
 void Ch422gComponent::pin_mode(uint8_t pin, gpio::Flags flags) {
+  expander->pinMode(pin, flags);
+
   if (flags == gpio::FLAG_INPUT) {
     // Clear mode mask bit
-    this->config_mask_ &= ~(1 << pin);
+    expander->pinMode(pin, INPUT);
   } else if (flags == gpio::FLAG_OUTPUT) {
     // Set mode mask bit
-    this->config_mask_ |= 1 << pin;
+    expander->pinMode(pin, OUTPUT);
   }
-  this->write_register_(CONFIG_REG, ~this->config_mask_);
+
+  // if (flags == gpio::FLAG_INPUT) {
+  //   // Clear mode mask bit
+  //   this->config_mask_ &= ~(1 << pin);
+  // } else if (flags == gpio::FLAG_OUTPUT) {
+  //   // Set mode mask bit
+  //   this->config_mask_ |= 1 << pin;
+  // }
+  // this->write_register_(CONFIG_REG, ~this->config_mask_);
 }
 
 bool Ch422gComponent::read_inputs_() {
