@@ -42,7 +42,11 @@ async def to_code(config):
         "v0.0.3",
         "https://github.com/esp-arduino-libs/ESP32_IO_Expander",
     )
-    cg.add_library("driver/i2c", None)
+    cg.add_library(
+        "driver/i2c",
+        "v3.3.3",
+        "https://github.com/espressif/esp-idf/blob/v3.3.3/components/driver/include/",
+    )
     cg.add(var.set_pin_count(config[CONF_PIN_COUNT]))
     await cg.register_component(var, config)
     await i2c.register_i2c_device(var, config)
