@@ -16,7 +16,6 @@ DEPENDENCIES = ["i2c"]
 MULTI_CONF = True
 CONF_PIN_COUNT = "pin_count"
 ch422g_ns = cg.esphome_ns.namespace("ch422g")
-
 Ch422gComponent = ch422g_ns.class_("Ch422gComponent", cg.Component, i2c.I2CDevice)
 ch422gGPIOPin = ch422g_ns.class_(
     "ch422gGPIOPin", cg.GPIOPin, cg.Parented.template(Ch422gComponent)
@@ -38,6 +37,7 @@ CONFIG_SCHEMA = (
 
 async def to_code(config):
     var = cg.new_Pvariable(config[CONF_ID])
+    cg.add_library("esp-arduino-libs/ESP32_IO_Expander", "v0.0.3")
     cg.add(var.set_pin_count(config[CONF_PIN_COUNT]))
     await cg.register_component(var, config)
     await i2c.register_i2c_device(var, config)

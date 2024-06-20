@@ -3,6 +3,7 @@
 #include "esphome/core/component.h"
 #include "esphome/core/hal.h"
 #include "esphome/components/i2c/i2c.h"
+#include <ESP_IOExpander_Library.h>
 
 namespace esphome {
 namespace ch422g {

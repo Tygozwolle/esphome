@@ -1,6 +1,6 @@
 #include "ch422g.h"
 #include "esphome/core/log.h"
-
+#include <ESP_IOExpander_Library.h>
 namespace esphome {
 namespace ch422g {
 
