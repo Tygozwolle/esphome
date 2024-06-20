@@ -17,21 +17,20 @@ MULTI_CONF = True
 CONF_PIN_COUNT = "pin_count"
 ch422g_ns = cg.esphome_ns.namespace("ch422g")
 
-ch422gComponent = ch422g_ns.class_("ch422gComponent", cg.Component, i2c.I2CDevice)
+Ch422gComponent = ch422g_ns.class_("Ch422gComponent", cg.Component, i2c.I2CDevice)
 ch422gGPIOPin = ch422g_ns.class_(
-    "ch422gGPIOPin", cg.GPIOPin, cg.Parented.template(ch422gComponent)
+    "ch422gGPIOPin", cg.GPIOPin, cg.Parented.template(Ch422gComponent)
 )
 
 CONF_ch422g = "ch422g"
 CONFIG_SCHEMA = (
     cv.Schema(
         {
-            cv.Required(CONF_ID): cv.declare_id(ch422gComponent),
+            cv.Required(CONF_ID): cv.declare_id(Ch422gComponent),
             cv.Optional(CONF_PIN_COUNT, default=8): cv.one_of(4, 8, 16),
         }
-    )
-    .extend(cv.COMPONENT_SCHEMA)
-    .extend(i2c.i2c_device_schema(0x24))
+    ).extend(cv.COMPONENT_SCHEMA)
+    # .extend(i2c.i2c_device_schema(0x24))
     # address is 0x24
 )
 
@@ -58,7 +57,7 @@ ch422g_PIN_SCHEMA = pins.gpio_base_schema(
     mode_validator=validate_mode,
 ).extend(
     {
-        cv.Required(CONF_ch422g): cv.use_id(ch422gComponent),
+        cv.Required(CONF_ch422g): cv.use_id(Ch422gComponent),
     }
 )
 
