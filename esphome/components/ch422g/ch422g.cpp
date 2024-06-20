@@ -16,7 +16,7 @@ ESP_IOExpander *expander;
 void Ch422gComponent::setup() {
   ESP_LOGCONFIG(TAG, "Setting up ch422g...");
   // this->reg_width_ = (this->pin_count_ + 7) / 8;
-  expander = new ESP_IOExpander_CH422G(0, this->address_);
+  expander = new ESP_IOExpander_CH422G(1, this->address_);
   expander->init();
   // Test to see if device exists
   if (!this->read_inputs_()) {
