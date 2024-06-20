@@ -45,7 +45,7 @@ async def to_code(config):
     cg.add_library(
         "driver/i2c",
         "v3.3.3",
-        "https://github.com/espressif/esp-idf/blob/v3.3.3/components/driver/include/",
+        "https://github.com/espressif/esp-idf/blob/v3.3.3/components/driver/include",
     )
     cg.add(var.set_pin_count(config[CONF_PIN_COUNT]))
     await cg.register_component(var, config)
