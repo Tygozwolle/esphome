@@ -135,25 +135,25 @@ void Ch422gComponent::pin_mode(uint8_t pin, gpio::Flags flags) {
 }
 
 bool Ch422gComponent::read_inputs_() {
-  // uint8_t inputs[2];
+  uint8_t inputs[2];
 
-  // if (this->is_failed()) {
-  //   ESP_LOGD(TAG, "Device marked failed");
-  //   return false;
-  // }
+  if (this->is_failed()) {
+    ESP_LOGD(TAG, "Device marked failed");
+    return false;
+  }
 
-  // if ((this->last_error_ = this->read_register(INPUT_REG * this->reg_width_, inputs, this->reg_width_, true)) !=
-  //     esphome::i2c::ERROR_OK) {
-  //   this->status_set_warning();
-  //   ESP_LOGE(TAG, "read_register_(): I2C I/O error: %d", (int) this->last_error_);
-  //   return false;
-  // }
-  // this->status_clear_warning();
-  // this->input_mask_ = inputs[0];
-  // if (this->reg_width_ == 2) {
-  //   this->input_mask_ |= inputs[1] << 8;
-  // }
-  // return true;
+  if ((this->last_error_ = this->read_register(INPUT_REG * this->reg_width_, inputs, this->reg_width_, true)) !=
+      esphome::i2c::ERROR_OK) {
+    this->status_set_warning();
+    ESP_LOGE(TAG, "read_register_(): I2C I/O error: %d", (int) this->last_error_);
+    return false;
+  }
+  this->status_clear_warning();
+  this->input_mask_ = inputs[0];
+  if (this->reg_width_ == 2) {
+    this->input_mask_ |= inputs[1] << 8;
+  }
+  return true;
 }
 
 bool Ch422gComponent::write_register_(uint8_t reg, uint16_t value) {
