@@ -37,7 +37,7 @@ CONFIG_SCHEMA = (
 
 async def to_code(config):
     var = cg.new_Pvariable(config[CONF_ID])
-    cg.add_library("esp-arduino-libs/ESP32_IO_Expander", "none", "esp-arduino-libs")
+    cg.add_library("esp-arduino-libs/ESP32_IO_Expander", "none")
     cg.add(var.set_pin_count(config[CONF_PIN_COUNT]))
     await cg.register_component(var, config)
     await i2c.register_i2c_device(var, config)
