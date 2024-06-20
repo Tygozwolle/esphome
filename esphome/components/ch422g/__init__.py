@@ -29,8 +29,9 @@ CONFIG_SCHEMA = (
             cv.Required(CONF_ID): cv.declare_id(Ch422gComponent),
             cv.Optional(CONF_PIN_COUNT, default=8): cv.one_of(4, 8, 16),
         }
-    ).extend(cv.COMPONENT_SCHEMA)
-    # .extend(i2c.i2c_device_schema(0x24))
+    )
+    .extend(cv.COMPONENT_SCHEMA)
+    .extend(i2c.i2c_device_schema(0x24))
     # address is 0x24
 )
 
