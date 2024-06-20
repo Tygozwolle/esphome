@@ -7,9 +7,9 @@
 namespace esphome {
 namespace ch422g {
 
-class ch422gComponent : public Component, public i2c::I2CDevice {
+class Ch422gComponent : public Component, public i2c::I2CDevice {
  public:
-  ch422gComponent() = default;
+  Ch422gComponent() = default;
 
   /// Check i2c availability and setup masks
   void setup() override;
@@ -60,13 +60,13 @@ class ch422gGPIOPin : public GPIOPin {
   void digital_write(bool value) override;
   std::string dump_summary() const override;
 
-  void set_parent(ch422gComponent *parent) { parent_ = parent; }
+  void set_parent(Ch422gComponent *parent) { parent_ = parent; }
   void set_pin(uint8_t pin) { pin_ = pin; }
   void set_inverted(bool inverted) { inverted_ = inverted; }
   void set_flags(gpio::Flags flags) { flags_ = flags; }
 
  protected:
-  ch422gComponent *parent_;
+  Ch422gComponent *parent_;
   uint8_t pin_;
   bool inverted_;
   gpio::Flags flags_;

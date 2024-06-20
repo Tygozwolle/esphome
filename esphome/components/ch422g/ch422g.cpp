@@ -12,7 +12,7 @@ const uint8_t CONFIG_REG = 0;
 
 static const char *const TAG = "ch422g";
 
-void ch422gComponent::setup() {
+void Ch422gComponent::setup() {
   ESP_LOGCONFIG(TAG, "Setting up ch422g...");
   this->reg_width_ = (this->pin_count_ + 7) / 8;
   // Test to see if device exists
@@ -37,14 +37,14 @@ void ch422gComponent::setup() {
            this->status_has_error());
 }
 
-void ch422gComponent::loop() {
+void Ch422gComponent::loop() {
   // The read_inputs_() method will cache the input values from the chip.
   this->read_inputs_();
   // Clear all the previously read flags.
   this->was_previously_read_ = 0x00;
 }
 
-void ch422gComponent::dump_config() {
+void Ch422gComponent::dump_config() {
   ESP_LOGCONFIG(TAG, "ch422g:");
   ESP_LOGCONFIG(TAG, "  I/O Pins: %d", this->pin_count_);
   LOG_I2C_DEVICE(this)
@@ -53,7 +53,7 @@ void ch422gComponent::dump_config() {
   }
 }
 
-bool ch422gComponent::digital_read(uint8_t pin) {
+bool Ch422gComponent::digital_read(uint8_t pin) {
   // Note: We want to try and avoid doing any I2C bus read transactions here
   // to conserve I2C bus bandwidth. So what we do is check to see if we
   // have seen a read during the time esphome is running this loop. If we have,
@@ -67,7 +67,7 @@ bool ch422gComponent::digital_read(uint8_t pin) {
   return this->input_mask_ & (1 << pin);
 }
 
-void ch422gComponent::digital_write(uint8_t pin, bool value) {
+void Ch422gComponent::digital_write(uint8_t pin, bool value) {
   if (value) {
     this->output_mask_ |= (1 << pin);
   } else {
@@ -76,7 +76,7 @@ void ch422gComponent::digital_write(uint8_t pin, bool value) {
   this->write_register_(OUTPUT_REG, this->output_mask_);
 }
 
-void ch422gComponent::pin_mode(uint8_t pin, gpio::Flags flags) {
+void Ch422gComponent::pin_mode(uint8_t pin, gpio::Flags flags) {
   if (flags == gpio::FLAG_INPUT) {
     // Clear mode mask bit
     this->config_mask_ &= ~(1 << pin);
@@ -87,7 +87,7 @@ void ch422gComponent::pin_mode(uint8_t pin, gpio::Flags flags) {
   // this->write_register_(CONFIG_REG, ~this->config_mask_);
 }
 
-bool ch422gComponent::read_inputs_() {
+bool Ch422gComponent::read_inputs_() {
   uint8_t inputs[2];
 
   if (this->is_failed()) {
@@ -109,7 +109,7 @@ bool ch422gComponent::read_inputs_() {
   return true;
 }
 
-bool ch422gComponent::write_register_(uint8_t reg, uint16_t value) {
+bool Ch422gComponent::write_register_(uint8_t reg, uint16_t value) {
   uint8_t outputs[2];
   outputs[0] = (uint8_t) value;
   outputs[1] = (uint8_t) (value >> 8);
@@ -124,11 +124,11 @@ bool ch422gComponent::write_register_(uint8_t reg, uint16_t value) {
   return true;
 }
 
-float ch422gComponent::get_setup_priority() const { return setup_priority::IO; }
+float Ch422gComponent::get_setup_priority() const { return setup_priority::IO; }
 
 // Run our loop() method very early in the loop, so that we cache read values before
 // before other components call our digital_read() method.
-float ch422gComponent::get_loop_priority() const { return 9.0f; }  // Just after WIFI
+float Ch422gComponent::get_loop_priority() const { return 9.0f; }  // Just after WIFI
 
 void ch422gGPIOPin::setup() { pin_mode(flags_); }
 void ch422gGPIOPin::pin_mode(gpio::Flags flags) { this->parent_->pin_mode(this->pin_, flags); }
