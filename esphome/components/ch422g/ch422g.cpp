@@ -73,7 +73,7 @@ bool Ch422gComponent::digital_read(uint8_t pin) {
 
 void Ch422gComponent::digital_write(uint8_t pin, bool value) {
   if (value) {
-    expander->digitalWrite(pin, 0xff);
+    expander->digitalWrite(pin, HIGH);
     ESP_LOGD(TAG, "Setting pin %d to HIGH", pin);
   } else {
     expander->digitalWrite(pin, LOW);
