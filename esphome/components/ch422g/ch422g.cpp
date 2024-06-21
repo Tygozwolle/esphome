@@ -85,7 +85,7 @@ void Ch422gComponent::digital_write(uint8_t pin, bool value) {
   uint8_t write[4];
   this->read_register(OUTPUT_REG, write, 4, true);
   if (value) {
-    ESP_LOGD(TAG, "Setting pin %d to HIGH %d", pin, write[0] | (1 << pin * 8);
+    ESP_LOGD(TAG, "Setting pin %d to HIGH %d", pin, write[0] | (1 << pin * 8));
     this->write_register_(OUTPUT_REG, write[0] | (1 << pin * 8));
   } else {
     this->write_register_(OUTPUT_REG, write[0] & ~(1 << pin * 8));
