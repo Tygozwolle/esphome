@@ -35,7 +35,7 @@ class Ch422gComponent : public Component, public i2c::I2CDevice {
   bool read_inputs_();
 
   bool write_register_(uint8_t reg, uint16_t value);
-
+  ESP_IOExpander_CH422G *expander;
   /// number of bits the expander has
   size_t pin_count_{8};
   /// width of registers

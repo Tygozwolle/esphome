@@ -11,7 +11,7 @@ const uint8_t INVERT_REG = 2;
 const uint8_t CONFIG_REG = 0;
 
 static const char *const TAG = "ch422g";
-ESP_IOExpander *expander;
+ESP_IOExpander_CH422G *expander;
 
 void Ch422gComponent::setup() {
   ESP_LOGCONFIG(TAG, "Setting up ch422g...");
