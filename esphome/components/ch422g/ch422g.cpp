@@ -91,7 +91,8 @@ void Ch422gComponent::digital_write(uint8_t pin, bool value) {
     write[arrayIndex] | (1 << pin % 2);
     this->write_register(OUTPUT_REG, write[0], 4, true);
   } else {
-    this->write_register(OUTPUT_REG, write[arrayIndex] & ~(1 << pin % 2));
+    write[arrayIndex] & ~(1 << pin % 2);
+    this->write_register(OUTPUT_REG, write[0], 4, true);
   }
 
   // if (value) {
