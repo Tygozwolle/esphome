@@ -71,7 +71,7 @@ bool Ch422gComponent::digital_read(uint8_t pin) {
   //  return this->input_mask_ & (1 << pin);
   u_int8_t read[4];
   this->read_register(INPUT_REG, read, 4, true);
-  return read[0] & (1 << pin * 8);
+  return read[0] & (1 << pin * 4);
   // return expander->digitalRead(pin);
 }
 
@@ -85,10 +85,10 @@ void Ch422gComponent::digital_write(uint8_t pin, bool value) {
   uint8_t write[4];
   this->read_register(OUTPUT_REG, write, 4, true);
   if (value) {
-    ESP_LOGD(TAG, "Setting pin %d to HIGH %d", pin, write[0] | (1 << pin * 8));
-    this->write_register_(OUTPUT_REG, write[0] | (1 << pin * 8));
+    ESP_LOGD(TAG, "Setting pin %d to HIGH %d", pin, write[0] | (1 << pin * 4));
+    this->write_register_(OUTPUT_REG, write[0] | (1 << pin * 4));
   } else {
-    this->write_register_(OUTPUT_REG, write[0] & ~(1 << pin * 8));
+    this->write_register_(OUTPUT_REG, write[0] & ~(1 << pin * 4));
   }
 
   // if (value) {
