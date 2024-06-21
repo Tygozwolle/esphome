@@ -69,7 +69,10 @@ bool Ch422gComponent::digital_read(uint8_t pin) {
   // read happens later in the same loop.
   // this->was_previously_read_ |= (1 << pin);
   //  return this->input_mask_ & (1 << pin);
-  return expander->digitalRead(pin);
+  u_int8_t read[4];
+  read_register(INPUT_REG, read, 4, true);
+  return read[0] & (1 << pin * 8);
+  // return expander->digitalRead(pin);
 }
 
 void Ch422gComponent::digital_write(uint8_t pin, bool value) {
