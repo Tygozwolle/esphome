@@ -85,11 +85,13 @@ void Ch422gComponent::digital_write(uint8_t pin, bool value) {
   uint8_t write[4];
   this->read_register(OUTPUT_REG, write, 4, true);
   ESP_LOGD(TAG, "reading pin %d to  %d", pin, write);
+  uint8_t arrayIndex = pin / 2;
   if (value) {
     ESP_LOGD(TAG, "Setting pin %d to HIGH %d", pin, write[0] | (1 << pin * 4));
-    this->write_register_(OUTPUT_REG, write[0] | (1 << pin * 4));
+    write[arrayIndex] | (1 << pin % 2);
+    this->write_register_(OUTPUT_REG, write[0], 4, true);
   } else {
-    this->write_register_(OUTPUT_REG, write[0] & ~(1 << pin * 4));
+    this->write_register_(OUTPUT_REG, write[arrayIndex] & ~(1 << pin % 2));
   }
 
   // if (value) {
