@@ -11,7 +11,7 @@ on:
       - "!.github/workflows/*.yml"
       - ".github/workflows/ci.yml"
       - "!.yamllint"
-      - "!.github/dependabot.yml"
+      - ".github/dependabot.yml"
   merge_group:
 
 permissions:
@@ -468,6 +468,8 @@ jobs:
       - name: Compile config
         run: |
           . venv/bin/activate
+          mkdir build_cache
+          export PLATFORMIO_BUILD_CACHE_DIR=$PWD/build_cache
           for component in ${{ matrix.components }}; do
             ./script/test_build_components -e compile -c $component
           done
