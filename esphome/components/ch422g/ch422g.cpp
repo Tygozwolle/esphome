@@ -104,14 +104,14 @@ void Ch422gComponent::digital_write(uint8_t pin, bool value) {
 }
 
 void Ch422gComponent::pin_mode(uint8_t pin, gpio::Flags flags) {
-  expander->pinMode(pin, flags); // NOLINT
+  expander->pinMode(pin, flags);  // NOLINT
 
   if (flags == gpio::FLAG_INPUT) {
     // Clear mode mask bit
-    expander->pinMode(pin, INPUT); // NOLINT
+    expander->pinMode(pin, INPUT);  // NOLINT
   } else if (flags == gpio::FLAG_OUTPUT) {
     // Set mode mask bit
-    expander->pinMode(pin, OUTPUT); // NOLINT
+    expander->pinMode(pin, OUTPUT);  // NOLINT
   }
 
   // if (flags == gpio::FLAG_INPUT) {
