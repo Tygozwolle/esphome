@@ -72,15 +72,15 @@ bool Ch422gComponent::digital_read(uint8_t pin) {
   u_int8_t read[4];
   this->read_register(INPUT_REG, read, 4, true);
   return read[0] & (1 << pin * 4);
-  // return expander->digitalRead(pin);
+  // return expander->digitalRead(pin); // NOLINT
 }
 
 void Ch422gComponent::digital_write(uint8_t pin, bool value) {
   // if (value) {
-  //   expander->digitalWrite(pin, HIGH);
+  //   expander->digitalWrite(pin, HIGH); // NOLINT
   //   ESP_LOGD(TAG, "Setting pin %d to HIGH", pin);
   // } else {
-  //   expander->digitalWrite(pin, LOW);
+  //   expander->digitalWrite(pin, LOW); // NOLINT
   // }
   uint8_t write[4];
   this->read_register(OUTPUT_REG, write, 4, true);
@@ -104,14 +104,14 @@ void Ch422gComponent::digital_write(uint8_t pin, bool value) {
 }
 
 void Ch422gComponent::pin_mode(uint8_t pin, gpio::Flags flags) {
-  expander->pinMode(pin, flags);
+  expander->pinMode(pin, flags); // NOLINT
 
   if (flags == gpio::FLAG_INPUT) {
     // Clear mode mask bit
-    expander->pinMode(pin, INPUT);
+    expander->pinMode(pin, INPUT); // NOLINT
   } else if (flags == gpio::FLAG_OUTPUT) {
     // Set mode mask bit
-    expander->pinMode(pin, OUTPUT);
+    expander->pinMode(pin, OUTPUT); // NOLINT
   }
 
   // if (flags == gpio::FLAG_INPUT) {
