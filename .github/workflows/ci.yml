@@ -263,7 +263,6 @@ jobs:
       - pyupgrade
     strategy:
       fail-fast: false
-   #   max-parallel: 2
       matrix:
         include:
           - id: clang-tidy
