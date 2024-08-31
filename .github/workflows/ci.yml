@@ -391,7 +391,6 @@ jobs:
     if: github.event_name == 'pull_request' && fromJSON(needs.list-components.outputs.count) > 0 && fromJSON(needs.list-components.outputs.count) < 100
     strategy:
       fail-fast: false
-      max-parallel: 2
       matrix:
         file: ${{ fromJson(needs.list-components.outputs.components) }}
     steps:
