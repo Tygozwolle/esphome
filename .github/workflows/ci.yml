@@ -388,7 +388,7 @@ jobs:
     needs:
       - common
       - list-components
-    if: github.event_name == 'pull_request' && fromJSON(needs.list-components.outputs.count) > 0 && fromJSON(needs.list-components.outputs.count) < 100
+    if: github.event_name == 'pull_request' && fromJSON(needs.list-components.outputs.count) > 0 && fromJSON(needs.list-components.outputs.count) < 200
     strategy:
       fail-fast: false
       matrix:
@@ -419,7 +419,7 @@ jobs:
     needs:
       - common
       - list-components
-    if: github.event_name == 'pull_request' && fromJSON(needs.list-components.outputs.count) >= 100
+    if: github.event_name == 'pull_request' && fromJSON(needs.list-components.outputs.count) >= 200
     outputs:
       matrix: ${{ steps.split.outputs.components }}
     steps:
