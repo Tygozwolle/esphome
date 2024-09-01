@@ -41,7 +41,7 @@ jobs:
         run: echo key="${{ hashFiles('requirements.txt', 'requirements_optional.txt', 'requirements_test.txt') }}" >> $GITHUB_OUTPUT
       - name: Set up Python ${{ env.DEFAULT_PYTHON }}
         id: python
-        uses: actions/setup-python@v5.1.0
+        uses: actions/setup-python@v5.2.0
         with:
           python-version: ${{ env.DEFAULT_PYTHON }}
       - name: Restore Python virtual environment
@@ -388,10 +388,9 @@ jobs:
     needs:
       - common
       - list-components
-    if: github.event_name == 'pull_request' && fromJSON(needs.list-components.outputs.count) > 0 && fromJSON(needs.list-components.outputs.count) < 100
+    if: github.event_name == 'pull_request' && fromJSON(needs.list-components.outputs.count) > 0 && fromJSON(needs.list-components.outputs.count) < 200
     strategy:
       fail-fast: false
-      max-parallel: 2
       matrix:
         file: ${{ fromJson(needs.list-components.outputs.components) }}
     steps:
@@ -420,7 +419,7 @@ jobs:
     needs:
       - common
       - list-components
-    if: github.event_name == 'pull_request' && fromJSON(needs.list-components.outputs.count) >= 100
+    if: github.event_name == 'pull_request' && fromJSON(needs.list-components.outputs.count) >= 200
     outputs:
       matrix: ${{ steps.split.outputs.components }}
     steps:
