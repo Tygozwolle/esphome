@@ -12,8 +12,9 @@ on:
       - "!.github/actions/build-image/*"
       - ".github/workflows/ci.yml"
       - "!.yamllint"
-      - "!.github/dependabot.yml"
-      - "!docker/**"
+
+      - ".github/dependabot.yml"
+
   merge_group:
 
 permissions:
@@ -264,7 +265,6 @@ jobs:
       - pyupgrade
     strategy:
       fail-fast: false
-      max-parallel: 2
       matrix:
         include:
           - id: clang-tidy
@@ -387,10 +387,9 @@ jobs:
     needs:
       - common
       - list-components
-    if: github.event_name == 'pull_request' && fromJSON(needs.list-components.outputs.count) > 0 && fromJSON(needs.list-components.outputs.count) < 100
+    if: github.event_name == 'pull_request' && fromJSON(needs.list-components.outputs.count) > 0 && fromJSON(needs.list-components.outputs.count) < 200
     strategy:
       fail-fast: false
-      max-parallel: 2
       matrix:
         file: ${{ fromJson(needs.list-components.outputs.components) }}
     steps:
@@ -421,7 +420,7 @@ jobs:
     needs:
       - common
       - list-components
-    if: github.event_name == 'pull_request' && fromJSON(needs.list-components.outputs.count) >= 100
+    if: github.event_name == 'pull_request' && fromJSON(needs.list-components.outputs.count) >= 200
     outputs:
       matrix: ${{ steps.split.outputs.components }}
     steps:
