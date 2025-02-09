@@ -89,6 +89,7 @@ class ILI9XXXDisplay : public display::DisplayBuffer,
 
   void dump_config() override;
   void setup() override;
+  void on_shutdown() override { this->command(ILI9XXX_SLPIN); }
 
   display::DisplayType get_display_type() override { return display::DisplayType::DISPLAY_TYPE_COLOR; }
   void draw_pixels_at(int x_start, int y_start, int w, int h, const uint8_t *ptr, display::ColorOrder order,
@@ -97,7 +98,8 @@ class ILI9XXXDisplay : public display::DisplayBuffer,
  protected:
   inline bool check_buffer_() {
     if (this->buffer_ == nullptr) {
-      this->alloc_buffer_();
+      if (!this->is_failed())
+        this->alloc_buffer_();
       return !this->is_failed();
     }
     return true;
